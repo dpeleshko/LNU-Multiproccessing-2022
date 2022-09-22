@@ -1,1 +1,45 @@
-123123123
+using System;
+using System.Threading;
+
+namespace Lab1
+{
+    class MainClass
+    { 
+        static int n = 3, k = 3;
+        static int[,] matrix = new int[n, k];
+        static Random r = new Random();
+        static int sum1, sum2;
+        public static void Main(string[] args)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < k; j++)
+                {
+                    matrix[i, j] = r.Next(0, 99);
+                    Console.Write(matrix[i, j] + "   ");
+
+                }
+                Console.WriteLine();
+            }
+            Thread thread1 = new Thread(ThreadFunction1);
+            thread1.Start();
+            Thread thread2 = new Thread(ThreadFunctio2);
+            thread2.Start();
+        }
+        static void ThreadFunction1()
+        {
+            int x = matrix[0, 1], x1 = matrix[0, 2], x2 = matrix[1, 2],
+                x3 = matrix[0, 0], x4 = matrix[1, 1], x5 = matrix[2, 2];
+            sum1 = x + x1 + x2 + x3 + x4 + x5;
+            Console.WriteLine("Cума елементiв верхньої трикутної пiдматрицi: " + (sum1));
+        }
+        static void ThreadFunctio2()
+        {
+
+            int y = matrix[1, 0], y1 = matrix[2, 0], y2 = matrix[2, 1];
+            sum2 = y + y1 + y2;
+            Console.WriteLine("Сума елементiв нижньої трикутної пiдматрицi: " + (sum2));
+            Console.WriteLine("Сума матрицi: " + (sum1 + sum2));
+        }
+    }
+}
