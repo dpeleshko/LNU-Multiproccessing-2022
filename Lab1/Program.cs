@@ -29,22 +29,24 @@ public class SquareMatrix
         }
     }
     
-    public int getMatrixSum()
+    public int getMatrixSum()// Спочатку подумав що треба зробити щоб верхній трикутник і нижній рахувались в різних потоках
     {
         int upperSum = 0;
         int bottomSum = 0;
         Thread t1, t2;
-        t1 = new Thread(()=>this.calcUpperSum(out upperSum));
+        t1 = new Thread(()=>this.calcUpperSum(out upperSum));// Залишив так як в першій версії завдання
         t2 = new Thread(() => this.calcBottomSum(out bottomSum));
         t1.Start();
         t2.Start();
         t1.Join();
         t2.Join();
-        Console.WriteLine(upperSum + bottomSum);
+        Console.WriteLine("Upper sum = " + upperSum);
+        Console.WriteLine("Bottom sum = " + bottomSum);
+        Console.WriteLine("Absolute AMtrix sum = " + (upperSum + bottomSum));
         return upperSum + bottomSum;
     }
 
-    protected void calcUpperSum(out int upperSum)
+    private void calcUpperSum(out int upperSum)
     {
         upperSum = 0;
         for (int i = 0; i < m_size; ++i)
@@ -72,11 +74,13 @@ public class SquareMatrix
     private uint m_size;
 }
 
+
 namespace Threads_Lab1
 {
+    
     class Program
     {
-        static void Main(string[] args)
+        static void perform()
         {
             uint n;
             Console.Write("Enter Matrix size: ");
@@ -84,10 +88,11 @@ namespace Threads_Lab1
             SquareMatrix obj = new SquareMatrix(n);
             obj.print();
             obj.getMatrixSum();
-            /*
-            Thread thr = new Thread(new ThreadStart(obj.print));
-            thr.Start();
-            */
+        }
+        static void Main(string[] args)
+        {
+            Thread t = new Thread(perform);
+            t.Start();
         }
     }
 }
