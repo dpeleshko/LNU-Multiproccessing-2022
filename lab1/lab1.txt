@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+
+namespace lab1
+{
+
+    class Program
+    {
+
+        static void Average()
+        {
+            Console.WriteLine("input value of row: "); 
+            int m = int.Parse(Console.ReadLine()); // задаємо кількість рядків
+            Console.WriteLine("input value of columns: ");
+            int n = int.Parse(Console.ReadLine()); //задаємо кількість стовпчиків
+            int[,] a = new int[m, n]; 
+            Random rand = new Random();
+            int i, j;
+            Console.WriteLine("matrix :");
+
+            for (i = 0; i < m; i++)  // цикл створює і виводить матрицю з рандомними елементами
+            {
+                for (j = 0; j < n; j++)
+                {
+                    a[i, j] = rand.Next(-10, 50);
+                    Console.Write("{0}\t", a[i, j]);
+                }
+                Console.WriteLine();
+            }
+
+            int sum = 0;
+            Console.WriteLine("max value of each row:");
+
+            for (i = 0; i < m; i++) // цикл знаходить максимальний елемент кожного рядка та їх суму
+            {
+                int max = 0;
+                for (j = 0; j < n; j++)
+                {
+                    if (a[i, j] > max)
+                        max = a[i, j];
+                }
+                sum += max; 
+                Console.WriteLine(max); //виводимо кожен максимальний елемент
+            }
+
+            float av = (float)sum / m; // знаходимо середнє арифметичне
+            Console.WriteLine("average = {0}", (float)av); // виводимо середнє арифметичне 
+            Console.Read();
+        }
+
+        static void Main()
+        {
+            Thread thread = new Thread(Average); // створюємо потік з силкою 
+            thread.Start(); // запускаємо потік
+
+        }
+    }
+}
