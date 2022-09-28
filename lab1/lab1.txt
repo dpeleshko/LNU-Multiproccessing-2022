@@ -11,16 +11,19 @@ namespace lab1
 
     class Program
     {
+        
+        static int m = int.Parse(Console.ReadLine()); // задаємо кількість рядкі
+        static int n = int.Parse(Console.ReadLine()); //задаємо кількість стовпчиків
+        static int[,] a = new int[m, n];
+        static Random rand = new Random();
+        static int i, j;
+        static int sum = 0;
 
-        static void Average()
+
+        static void Main()
         {
-            Console.WriteLine("input value of row: "); 
-            int m = int.Parse(Console.ReadLine()); // задаємо кількість рядків
-            Console.WriteLine("input value of columns: ");
-            int n = int.Parse(Console.ReadLine()); //задаємо кількість стовпчиків
-            int[,] a = new int[m, n]; 
-            Random rand = new Random();
-            int i, j;
+            
+
             Console.WriteLine("matrix :");
 
             for (i = 0; i < m; i++)  // цикл створює і виводить матрицю з рандомними елементами
@@ -31,9 +34,22 @@ namespace lab1
                     Console.Write("{0}\t", a[i, j]);
                 }
                 Console.WriteLine();
-            }
+                
 
-            int sum = 0;
+            }
+       
+
+            Thread thread1 = new Thread(summ); // створюємо 1 потік
+            thread1.Start(); // запускаємо 1 потік
+
+            Thread thread2 = new Thread(Average); // створюємо 2 потік
+            thread2.Start(); // запускаємо 2 потік
+
+            Console.ReadLine();
+        }
+        static void summ()
+        {
+            
             Console.WriteLine("max value of each row:");
 
             for (i = 0; i < m; i++) // цикл знаходить максимальний елемент кожного рядка та їх суму
@@ -44,20 +60,19 @@ namespace lab1
                     if (a[i, j] > max)
                         max = a[i, j];
                 }
-                sum += max; 
+                sum += max;
                 Console.WriteLine(max); //виводимо кожен максимальний елемент
             }
-
-            float av = (float)sum / m; // знаходимо середнє арифметичне
-            Console.WriteLine("average = {0}", (float)av); // виводимо середнє арифметичне 
-            Console.Read();
         }
 
-        static void Main()
+        static void Average()
         {
-            Thread thread = new Thread(Average); // створюємо потік з силкою 
-            thread.Start(); // запускаємо потік
+            {
 
+                float av = (float)sum / m; // знаходимо середнє арифметичне
+                Console.WriteLine("average = {0}", (float)av); // виводимо середнє арифметичне 
+                Console.Read();
+            }
         }
     }
 }
