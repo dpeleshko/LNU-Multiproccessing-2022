@@ -8,8 +8,8 @@ namespace Lab2
         static double x = 1, y = 5, z = 4;
         static Semaphore S1 = new Semaphore(0, 1);
         static Semaphore S2 = new Semaphore(0, 1);
-        static Semaphore S3 = new Semaphore(0, 1);
-        static Semaphore S4 = new Semaphore(0, 1);
+        static Semaphore S3 = new Semaphore(-1, 2);
+        //static Semaphore S4 = new Semaphore(0, 1);
         static void Main(string[] args)
         {
 
@@ -37,7 +37,7 @@ namespace Lab2
             Thread T4 = new Thread(() =>
             {
                 S2.WaitOne();
-                y -= 3; S4.Release();
+                y -= 3; S3.Release();
             });
 
             //end move
@@ -45,10 +45,10 @@ namespace Lab2
             {
 
                 S3.WaitOne();
-                S4.WaitOne();
+                //S4.WaitOne();
                 y *= x;
                 S3.Release();
-                S4.Release();
+                //S4.Release();
             });
 
             Thread[] threads = { T1, T2, T3, T4, T5 };
