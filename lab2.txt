@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+namespace ConsoleApplication1
+{
+    class Program{
+        static double x = 19, y = 5, z = 4;
+        static Semaphore S1 = new Semaphore(0, 3);
+        static Semaphore S2 = new Semaphore(0, 1);
+        static Semaphore S3 = new Semaphore(0, 1);
+        static Semaphore S4 = new Semaphore(0, 1);
+        static void Main(string[] args)
+        {
+            Thread T1 = new Thread(() =>
+            {
+                y -= 3;
+                S1.Release(3);
+            }
+            );
+            Thread T2 = new Thread(() =>
+            {
+                S1.WaitOne();
+                x /= 5;
+                S2.Release();
+            });
+            Thread T3 = new Thread(() =>
+            {
+                S1.WaitOne();
+                y *= 2;
+                S3.Release();
+            });
+            Thread T4 = new Thread(() =>
+            {
+                S1.WaitOne();
+                z -= 3;
+                S4.Release();
+            });
+            Thread T5 = new Thread(() =>
+            {
+                S2.WaitOne();
+                S3.WaitOne();
+                S4.WaitOne();
+                x = x + y + z;
+            }
+            );
+            Console.WriteLine("x = {0}; y = {1}; z = {2}", x, y, z);
+            T1.Start();
+            T2.Start();
+            T3.Start();
+            T4.Start();
+            T5.Start();
+            T1.Join();
+            T2.Join();
+            T3.Join();
+            T4.Join();
+            T5.Join();
+            Console.WriteLine("x = {0}; y = {1}; z = {2}", x, y, z);
+            Console.ReadKey();
+        }
+    }
+}

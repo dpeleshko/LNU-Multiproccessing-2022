@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
+
+
+
+namespace Lab1
+{
+    class Program
+    {
+        static string g = "The dimension of the matrix is:";
+        static int a = int.Parse(Console.ReadLine());
+        static int b=a;
+        static int i;
+        static int j;
+        static int sum1;
+        static int sum2;
+        static int[,] m = new int[a, b];
+        static Random rand = new Random();
+        static void Main(string[] args)
+        {
+            Console.WriteLine($"{g} {a}");
+            Console.WriteLine("Matrix:");
+            for (i = 0; i < a; i++)
+            {
+                for (j = 0; j < b; j++)
+                {
+                    m[i, j] = rand.Next(-10, 50);
+                    Console.Write($"\t {m[i, j]}");
+                }
+                Console.WriteLine();
+            }
+            Thread thread1 = new Thread(ThreadFunction1);
+            thread1.Start();
+            // Створюємо другий потік 
+            Thread thread2 = new Thread(ThreadFunction2);
+            thread2.Start();
+        }
+        static void ThreadFunction1()
+        {
+            sum1 = 0;
+            for (i = 0; i < a; i++)
+            {
+                for (j = i; j < b; j++)
+                {
+                    sum1 += m[i, j];
+                }
+            }
+            Console.WriteLine($"The sum of the upper triangular matrix={sum1}");
+        }
+        static void ThreadFunction2()
+        {
+            sum2 = 0;
+            for (i = 0; i < a; i++)
+            {
+                for (j = 0; j <= i; j++)
+                {
+                    sum2 += m[i, j];
+                }
+            }
+            Console.WriteLine($"The sum of the lower triangular matrix={sum2}");
+            Console.ReadLine();
+        }
+    }
+}
