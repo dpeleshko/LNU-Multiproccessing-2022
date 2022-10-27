@@ -55,7 +55,7 @@ namespace Lab1
         {
             Thread t1 = new Thread(get_Diagonals_Length_Sum);
             t1.Start();
-            
+            t1.Join();
         }
     }
 }
