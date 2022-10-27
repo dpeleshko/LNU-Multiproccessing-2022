@@ -42,14 +42,11 @@ namespace Lab3
         {
             x5 = 5;
             x6 = 6;
-            C = x5 * x6;
+            C = x5 + x6;
             wh3.Set();
         }
         static void Func3()
         {
-            //wh1.WaitOne();
-            //wh2.WaitOne();
-            //wh3.WaitOne();
             WaitHandle.WaitAll(new EventWaitHandle[] { wh1, wh2, wh3 }, -1);
             Console.WriteLine("F = {0}", A + B + C);
         }
