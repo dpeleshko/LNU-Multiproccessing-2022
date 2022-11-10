@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.*;
+import java.util.*;
+// Q= 5X + 2Y
+public class Main 
+{
+	public static int N = 30;
+	
+	public static void main(String[] args) throws InterruptedException 
+	{
+		Vector<Integer> X = new Vector<Integer>();
+		Vector<Integer> Y = new Vector<Integer>();
+		Vector<Integer> Q = new Vector<Integer>();
+		
+		for(int i = 1; i <= N; ++i)
+		{
+			X.add(1);
+			Y.add(i);
+		}
+		
+		Thread firstOperation = new Thread(new FirstOperation(X, 5));
+		Thread secondOperation = new Thread(new FirstOperation(Y, 2));
+		
+		firstOperation.start();
+		secondOperation.start();
+		
+		firstOperation.join();
+		secondOperation.join();
+		
+		Thread ThirdOperation = new Thread(new ThreadsAdding(X, Y, Q));
+		ThirdOperation.start();
+		ThirdOperation.join();
+		
+		for(int i = 0; i <N; ++i)
+		{
+			System.out.print(Q.get(i) + " ");
+		}
+	}
+}

@@ -1,0 +1,27 @@
+
+import java.io.BufferedReader;
+import java.io.*;
+import java.util.*;
+
+public class FirstOperation implements Runnable {
+
+	private Vector<Integer> X;
+	int num;
+	
+	public FirstOperation(Vector<Integer> inX, int inNum)
+	{
+		X = inX;
+		num = inNum;
+	}
+	
+	@Override
+	public void run() {
+		
+		for(int i = 0; i < Main.N; ++i)
+		{
+			X.set(i,  X.get(i) * num);
+		}
+
+	}
+
+}

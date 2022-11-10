@@ -1,0 +1,26 @@
+import java.util.Vector;
+
+public class ThreadsAdding implements Runnable {
+	
+	private Vector<Integer> X;
+	private Vector<Integer> Y;
+	private Vector<Integer> Q;
+	
+	public ThreadsAdding(Vector<Integer> inX, Vector<Integer> inY, Vector<Integer> inQ)
+	{
+		X = inX;
+		Y = inY;
+		Q = inQ;
+	}
+	
+	@Override
+	public void run() 
+	{
+		// TODO Auto-generated method stub
+		for(int i = 0; i < X.size(); ++i)
+		{
+			Q.add(X.get(i) + Y.get(i));
+		}
+	}
+
+}
