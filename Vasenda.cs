@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 
 /*
@@ -51,7 +51,7 @@ namespace lab1
         }
         static void Main(string[] args)
         {
-            new Thread(findPairScalars).Start();
+            Thread(findPairScalars).Start().Join();
         }
     }
 }
