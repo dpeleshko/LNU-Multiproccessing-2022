@@ -1,103 +1,57 @@
-﻿using System;
+using System;
 using System.Threading;
-
-/*
-Знайти попарний скалярний добуток рядків прямокутної матриці. Кількість рядків 
-матриці є парною. Матриця задається рандомно. Розмірність матриці вводиться з 
-консолі
- */
-
-namespace lab1
+class Program
 {
-    public class VectorPair{
+    static int n;
+    static int MIN_VALUE = 1;
+    static bool IS_MULTI_PROCESS = false;
+    static void Main()
+    {
+        Console.Write("Array lenght: ");
+        n = Convert.ToInt32(Console.ReadLine());
 
-        public int[] FirstVector { get; set; }
-        public int[] SecondVector { get; set; }
-        public int Lenght { get; set; }
-        public int RowNumber { get; set; }
+        IS_MULTI_PROCESS = Confirm("compute with multiprocessing?");
 
-        public VectorPair(int[] first, int[] second, int rowNumber)
+        if (n < MIN_VALUE)
         {
-            FirstVector = first;
-            SecondVector = second;
-            Lenght = second.Length;
-            RowNumber = rowNumber;
+            Console.WriteLine("Input number should be greater then 0");
+            Environment.Exit(1);
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (IS_MULTI_PROCESS)
+            {
+                new Thread((Sum)).Start();
+            }
+            else
+            {
+                Sum();
+            }
+
         }
     }
-    class Program
+
+    static void Sum()
     {
-        static int[,] GenerateMatrix()
+        int sum = (n * (n + 1)) / 2;
+        Console.WriteLine("Result: " + sum);
+        Console.WriteLine("Function finished execution at: " + DateTime.Now.ToString("ss:ffff tt"));
+    }
+
+    public static bool Confirm(string title)
+    {
+        ConsoleKey response;
+        do
         {
-            int m, n;
-            Console.Write("Enter Matrix size: ");
-            m = int.Parse(Console.ReadLine()!);
-            n = int.Parse(Console.ReadLine()!);
-
-            int[,] matrix = new int[m, n];
-            if (m % 2 == 0)
+            Console.Write($"{ title } [y/n] ");
+            response = Console.ReadKey(false).Key;
+            if (response != ConsoleKey.Enter)
             {
-                Random rand = new Random();
-                for (int i = 0; i < m; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        matrix[i, j] = rand.Next() % 10;
-                    }
-                }
-
-                for (int i = 0; i < m; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        Console.Write(matrix[i, j] + " ");
-                    }
-                    Console.WriteLine();
-                }
-                return matrix;
+                Console.WriteLine();
             }
-            else { return null; }
-        }
+        } while (response != ConsoleKey.Y && response != ConsoleKey.N);
 
-        static void FindPairScalarsRow(object obj) 
-        {
-            var vectorPair = (VectorPair)obj; 
-
-            int scalar = 0;
-            for (int i = 0; i < vectorPair.Lenght; i++)
-            {
-                scalar  += vectorPair.FirstVector[i] * vectorPair.SecondVector[i];
-            }
-
-            Console.WriteLine($"Scalar multiplication Of vectors {vectorPair.RowNumber + 1} and {vectorPair.RowNumber + 2}  = " + scalar);
-        }
-
-        static void ThreadStarter(VectorPair pair) {
-            Thread myThread = new Thread(FindPairScalarsRow);
-            myThread.Start(pair);
-        }
-        static void Main(string[] args)
-        {
-            var matrix = GenerateMatrix();
-            
-                
-            var rowNumber = 0;
-
-            for (int j = 0; j < matrix.GetLength(1) - 1; j++)
-            {
-
-                var first = new int[matrix.GetLength(1)];
-                var second = new int[matrix.GetLength(1)];
-
-                for (int i = 0; i < matrix.GetLength(1); i++)
-                {
-                    first[i] = (int)matrix.GetValue(rowNumber, i)!;
-                    second[i] = (int)matrix.GetValue(rowNumber + 1, i)!;
-                }
-
-                ThreadStarter(new VectorPair(first, second, rowNumber));
-
-                rowNumber++;
-            }
-        }
+        return (response == ConsoleKey.Y);
     }
 }
